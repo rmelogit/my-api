@@ -33,8 +33,9 @@ module.exports = function(app){
     });
 
     app.put('/alterar/:id', function(req, res){
-        var cliente = res.body;
+        var cliente = req.body;
         var id = req.params.id;
+
         console.log("ID: "+id);
         console.log("cliente: "+ cliente);
 
@@ -46,7 +47,7 @@ module.exports = function(app){
                 res.status(404).send(erro);
                 return;
             }
-            console.log('cliente criado');
+            console.log('cliente alterado');
             res.status(204).send(cliente);
         });
     });
