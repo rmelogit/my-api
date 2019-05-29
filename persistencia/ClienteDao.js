@@ -6,8 +6,8 @@ ClienteDao.prototype.salva = function(cliente, callback) {
     this._connection.query('INSERT INTO clientes SET ?', cliente, callback);
 };
 
-ClienteDao.prototype.atualiza = function(cliente, callback) {
-    this._connection.query('UPDATE clientes SET ? where id = ?', [cliente, cliente.id], callback);
+ClienteDao.prototype.atualiza = function(id, cliente, callback) {
+    this._connection.query('UPDATE clientes SET ? where id = ?', [cliente, id], callback);
 };
 
 ClienteDao.prototype.deleta = function(id, callback) {

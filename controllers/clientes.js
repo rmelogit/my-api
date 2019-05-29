@@ -42,7 +42,9 @@ module.exports = function(app){
         var connection = app.persistencia.connectionFactory();
         var clienteDao = new app.persistencia.ClienteDao(connection);
 
-        clienteDao.atualiza(cliente, function(erro){
+        cliente.date = new Date(cliente.date).toLocaleString()
+
+        clienteDao.atualiza(id, cliente, function(erro){
             if (erro){
                 res.status(404).send(erro);
                 return;
