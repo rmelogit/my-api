@@ -77,6 +77,7 @@ module.exports = function(app){
     });
 
     app.delete('/deletar/:nome', function(req, res){
+
         var nome = req.params.nome;
 
         if (!nome){
@@ -85,15 +86,18 @@ module.exports = function(app){
         var connection = app.persistencia.connectionFactory();
         var clienteDao = new app.persistencia.ClienteDao(connection);
 
-        clienteDao.deleta(nome, function(erro,result){
-            console.log(result);
-            if (result.length < 1){
+        clienteDao.buscaPorNome(nome, function(erro,result){
+
+            if (result.length >= 1) {
+                clienteDao.deleta(nome, function(erro,result){
+                    console.log('cliente excluido');
+                    res.status(200);
+                });
+            } else {
                 console.log('nenhum resultado encontrado');
                 res.status(404).send(erro);
                 return;
-            }else{
-                console.log('cliente excluido');
-                res.status(200);
+
             }
         });
     });
