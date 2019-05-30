@@ -7,7 +7,7 @@ ClienteDao.prototype.salva = function(cliente, callback) {
 };
 
 ClienteDao.prototype.atualiza = function(id, cliente, callback) {
-    this._connection.query('UPDATE clientes SET ? where id = ?', [cliente, id], callback);
+    this._connection.query('UPDATE clientes SET nome = ?, sobrenome = ?, data = ?, sexo = ? where id = ?', [cliente.nome, cliente.sobrenome, cliente.data, cliente.sexo, id], callback);
 };
 
 ClienteDao.prototype.deleta = function(id, callback) {
@@ -15,7 +15,7 @@ ClienteDao.prototype.deleta = function(id, callback) {
 };
 
 ClienteDao.prototype.lista = function(callback) {
-    this._connection.query('select * from clientes',callback);
+    this._connection.query('SELECT * FROM clientes',callback);
 };
 
 ClienteDao.prototype.buscaPorId = function (id, callback) {
