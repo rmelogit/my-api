@@ -21,6 +21,7 @@ module.exports = function(app){
     app.post("/cadastrar",function(req, res) {
         var cliente = req.body;
         console.log('processando o cadastro... '+ cliente);
+
         var connection = app.persistencia.connectionFactory();
         var clienteDao = new app.persistencia.ClienteDao(connection);
 
@@ -42,7 +43,7 @@ module.exports = function(app){
 
         clienteDao.atualiza(id, cliente, function(erro){
             if (erro){
-                res.status(404).send(erro);
+                res.status(500).send(erro);
                 return;
             }
             console.log('cliente alterado');
@@ -50,21 +51,50 @@ module.exports = function(app){
         });
     });
 
-    app.delete('/deletar/:id', function(req, res){
-        var id = req.params.id;
+    app.get('/buscar/:nome', function(req, res){
+        var nome = req.params.nome;
 
-        console.log("Processo de exclusão iniciado para: "+id);
+        if (!nome){
+            return;
+        }
 
         var connection = app.persistencia.connectionFactory();
         var clienteDao = new app.persistencia.ClienteDao(connection);
 
-        clienteDao.deleta(id, function(erro){
-            if (erro){
+        clienteDao.buscaPorNome(nome, function(erro,result){
+
+            if (result.length >= 1) {
+                console.log('resultado da busca:');
+                console.log(result);
+                res.status(200).json(result);
+            } else {
+                console.log('nenhum resultado encontrado');
                 res.status(404).send(erro);
                 return;
+
             }
-            console.log('cliente excluido');
-            res.status(200);
+        });
+    });
+
+    app.delete('/deletar/:nome', function(req, res){
+        var nome = req.params.nome;
+
+        if (!nome){
+            return;
+        }
+        var connection = app.persistencia.connectionFactory();
+        var clienteDao = new app.persistencia.ClienteDao(connection);
+
+        clienteDao.deleta(nome, function(erro,result){
+            console.log(result);
+            if (result.length < 1){
+                console.log('nenhum resultado encontrado');
+                res.status(404).send(erro);
+                return;
+            }else{
+                console.log('cliente excluido');
+                res.status(200);
+            }
         });
     });
 };
